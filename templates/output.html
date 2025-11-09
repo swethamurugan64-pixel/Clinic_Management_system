@@ -93,7 +93,9 @@
                 <td>₹{{ grand_total }}</td>
             </tr>
         </table>
-
+        <h3>Scan to Pay</h3>
+        <img src="data:image/png;base64,{{ qr_data }}" alt="QR Code" width="200" height="200">
+        <p>Amount: ₹{{ grand_total }}</p>
         <p>Thank you for visiting our clinic 💊</p>
         <a href="/" class="btn">Back to Home</a>
     </div>
