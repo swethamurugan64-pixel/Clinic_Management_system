@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <title>Existing Patient Details</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .container {
+            width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        table {
+            margin: 20px auto;
+            width: 90%;
+            border-collapse: collapse;
+        }
+
+        th,td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .section-title {
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        select,input {
+            padding: 8px;
+            margin: 10px;
+            width: 60%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Returning Patient</h2>
+        <p><strong>Name:</strong> {{ patient.Patient_name }}</p>
+        <p><strong>Contact:</strong> {{ patient.Contact }}</p>
+        <p><strong>Age:</strong> {{ patient.Age }} | <strong>Gender:</strong> {{ patient.Gender }}</p>
+
+        <h3 class="section-title">💊 Suggested Medicines (Previously Bought)</h3>
+        {% if suggested %}
+        <table>
+            <tr>
+                <th>Medicine</th>
+                <th>Total Quantity Bought</th>
+            </tr>
+            {% for med in suggested %}
+            <tr>
+                <td>{{ med.Medicine }}</td>
+                <td>{{ med.total_qty }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No previous purchases found.</p>
+        {% endif %}
+
+        <h3 class="section-title">🧾 Purchase History</h3>
+        {% if purchases %}
+        <table>
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Total Price (₹)</th>
+            </tr>
+            {% for p in purchases %}
+            <tr>
+                <td>{{ p.Medicine }}</td>
+                <td>{{ p.Quantity }}</td>
+                <td>{{ p.Total_price }}</td>
+            </tr>
+            {% endfor %}
+            <tr style="background-color:#f8f8f8; font-weight:bold;">
+                <td colspan="2">Total Spent</td>
+                <td>₹{{ total_spent }}</td>
+            </tr>
+        </table>
+        {% else %}
+        <p>No previous history available.</p>
+        {% endif %}
+
+        <h3 class="section-title">🛍 Buy New Medicine</h3>
+        <form method="POST" action="/purchase">
+            <input type="hidden" name="name" value="{{ patient.Patient_name }}">
+            <input type="hidden" name="contact" value="{{ patient.Contact }}">
+            <input type="hidden" name="age" value="{{ patient.Age }}">
+            <input type="hidden" name="gender" value="{{ patient.Gender }}">
+
+            <select name="medicine" required>
+                {% for med, price in medicines.items() %}
+                <option value="{{ med }}">{{ med }} — ₹{{ price }}</option>
+                {% endfor %}
+            </select><br>
+            <input type="number" name="qty" min="1" value="1" required><br>
+            <button type="submit">Purchase</button>
+        </form>
+    </div>
+</body>
+
+</html>
