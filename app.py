@@ -126,6 +126,15 @@ def purchase():
     # Calculate grand total
     grand_total = sum([item[2] for item in bill_items])
 
+    # Generate payment link (for example, UPI)
+    payment_link = f"upi://pay?pa=swethamurugan64@oksbi&pn=ClinicName&am={grand_total}&cu=INR&tn=Clinic%20Payment"
+
+    # Generate QR code image
+    qr = qrcode.make(payment_link)
+    buf = io.BytesIO()
+    qr.save(buf, format='PNG')
+    qr_data = base64.b64encode(buf.getvalue()).decode('utf-8')
+
     return render_template(
         'output.html',
         name=name,
@@ -133,7 +142,9 @@ def purchase():
         age=age,
         gender=gender,
         bill_items=bill_items,
-        grand_total=grand_total
+        grand_total=grand_total,
+        qr_data=qr_data,
+        payment_link=payment_link
     )
 
 #Run flask app
@@ -145,6 +156,7 @@ if __name__ == '__main__':
     # Get port dynamically from Render environment variable
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
 
