@@ -141,4 +141,5 @@ if __name__=='__main__':
     @app.context_processor
     def inject_now():
         return {'now': datetime.now}
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000)
+
