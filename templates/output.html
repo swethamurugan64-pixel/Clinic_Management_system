@@ -1,0 +1,102 @@
+<html>
+
+<head>
+    <title>Clinic Bill Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        .bill {
+            width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .info {
+            text-align: left;
+            margin-left: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bill">
+        <h2>Clinic Management System</h2>
+        <p><strong>Date:</strong> {{ now().strftime('%d-%m-%Y %H:%M:%S') }}</p>
+
+        <div class="info">
+            <p><strong>Patient Name:</strong> {{ name }}</p>
+            <p><strong>Contact:</strong> {{ contact }}</p>
+            <p><strong>Age:</strong> {{ age }}</p>
+            <p><strong>Gender:</strong> {{ gender }}</p>
+        </div>
+
+        <h3>Medicine Purchase Bill</h3>
+        <table>
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Total (₹)</th>
+            </tr>
+            {% for item in bill_items %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td>{{ item[1] }}</td>
+                <td>{{ item[2] }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="2">Grand Total</td>
+                <td>₹{{ grand_total }}</td>
+            </tr>
+        </table>
+
+        <p>Thank you for visiting our clinic 💊</p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+</body>
+
+</html>
