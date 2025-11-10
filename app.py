@@ -4,6 +4,7 @@ from datetime import datetime
 import qrcode
 import io
 import base64
+import os
 
 app = Flask(__name__)
 
@@ -152,10 +153,11 @@ if __name__ == '__main__':
     @app.context_processor
     def inject_now():
         return {'now': datetime.now}
-    import os
+    
     # Get port dynamically from Render environment variable
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
 
