@@ -1,2 +1,7 @@
 Flask
 mysql-connector-python
+qrcode[pil]
+Pillow
+gunicorn
+
+
