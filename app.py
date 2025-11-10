@@ -13,7 +13,22 @@ medicines = {
     "Amoxicillin": 50.0,
     "Cough Syrup": 80.0,
     "Vitamin C": 40.0,
-    "Pain Relief Gel": 100.0
+    "Pain Relief Gel": 100.0,
+    "Ibuprofen": 30.0,
+    "Cetirizine": 20.0,
+    "Antacid Tablets": 35.0,
+    "Metformin": 60.0,
+    "Azithromycin": 70.0,
+    "Diclofenac": 45.0,
+    "Calcium Tablets": 55.0,
+    "Multivitamin Syrup": 65.0,
+    "Insulin Injection": 120.0,
+    "Hydrocortisone Cream": 90.0,
+    "Aspirin": 25.0,
+    "Loratadine": 30.0,
+    "Omeprazole": 50.0,
+    "Dolo 650": 35.0,
+    "Amoxiclav": 85.0
 }
 
 # HOME PAGE
@@ -157,6 +172,7 @@ if __name__ == '__main__':
     # Get port dynamically from Render environment variable
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
 
