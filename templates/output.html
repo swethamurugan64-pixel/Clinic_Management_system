@@ -1,6 +1,7 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Clinic Bill Receipt</title>
     <style>
         body {
@@ -20,6 +21,7 @@
 
         h2 {
             color: #007bff;
+            margin-bottom: 10px;
         }
 
         table {
@@ -59,6 +61,10 @@
             text-align: left;
             margin-left: 50px;
         }
+
+        .qr {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -81,24 +87,30 @@
                 <th>Quantity</th>
                 <th>Total (₹)</th>
             </tr>
-            {% for item in bill_items %}
+            <!-- Show only the latest purchase -->
+            {% if bill_items %}
             <tr>
-                <td>{{ item[0] }}</td>
-                <td>{{ item[1] }}</td>
-                <td>{{ item[2] }}</td>
+                <td>{{ bill_items[0][0] }}</td>
+                <td>{{ bill_items[0][1] }}</td>
+                <td>{{ bill_items[0][2] }}</td>
             </tr>
-            {% endfor %}
+            {% endif %}
             <tr class="total-row">
                 <td colspan="2">Grand Total</td>
                 <td>₹{{ grand_total }}</td>
             </tr>
         </table>
-        <h3>Scan to Pay</h3>
-        <img src="data:image/png;base64,{{ qr_data }}" alt="QR Code" width="200" height="200">
-        <p>Amount: ₹{{ grand_total }}</p>
+
+        <div class="qr">
+            <h3>Scan to Pay</h3>
+            <img src="data:image/png;base64,{{ qr_data }}" alt="QR Code" width="200" height="200">
+            <p><strong>Amount: ₹{{ grand_total }}</strong></p>
+        </div>
+
         <p>Thank you for visiting our clinic 💊</p>
         <a href="/" class="btn">Back to Home</a>
     </div>
 </body>
-
 </html>
+
+      
