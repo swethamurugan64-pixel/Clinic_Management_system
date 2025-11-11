@@ -97,30 +97,6 @@
         <p>No previous purchases found.</p>
         {% endif %}
 
-        <h3 class="section-title">🧾 Purchase History</h3>
-        {% if purchases %}
-        <table>
-            <tr>
-                <th>Medicine</th>
-                <th>Quantity</th>
-                <th>Total Price (₹)</th>
-            </tr>
-            {% for p in purchases %}
-            <tr>
-                <td>{{ p.Medicine }}</td>
-                <td>{{ p.Quantity }}</td>
-                <td>{{ p.Total_price }}</td>
-            </tr>
-            {% endfor %}
-            <tr style="background-color:#f8f8f8; font-weight:bold;">
-                <td colspan="2">Total Spent</td>
-                <td>₹{{ total_spent }}</td>
-            </tr>
-        </table>
-        {% else %}
-        <p>No previous history available.</p>
-        {% endif %}
-
         <!-- 🛍 Buy New Medicines (MULTIPLE) -->
         <h3 class="section-title">🛍 Buy New Medicines</h3>
         <form method="POST" action="/purchase">
