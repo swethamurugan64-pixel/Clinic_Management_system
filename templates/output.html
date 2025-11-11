@@ -87,13 +87,15 @@
                 <th>Quantity</th>
                 <th>Total (₹)</th>
             </tr>
-            <!-- Show only the latest purchase -->
+            <!-- ✅ Loop through all medicines purchased -->
             {% if bill_items %}
-            <tr>
-                <td>{{ bill_items[0][0] }}</td>
-                <td>{{ bill_items[0][1] }}</td>
-                <td>{{ bill_items[0][2] }}</td>
-            </tr>
+                {% for item in bill_items %}
+                <tr>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                </tr>
+                {% endfor %}
             {% endif %}
             <tr class="total-row">
                 <td colspan="2">Grand Total</td>
