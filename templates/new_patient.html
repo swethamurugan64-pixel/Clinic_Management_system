@@ -1,5 +1,4 @@
 <html>
-
 <head>
     <title>New Patient Registration</title>
     <style>
@@ -18,7 +17,7 @@
             box-shadow: 0 0 10px gray;
         }
 
-        input,select,textarea {
+        input, select, textarea {
             margin: 10px;
             padding: 10px;
             width: 80%;
@@ -37,39 +36,67 @@
             background-color: #0069d9;
         }
 
-        table {
-            margin: 20px auto;
-            width: 80%;
-            border-collapse: collapse;
+        .add-btn {
+            background-color: #28a745;
         }
 
-        td,th {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
+        .add-btn:hover {
+            background-color: #218838;
+        }
+
+        .medicine-item {
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #007bff;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>New Patient Registration</h2>
         <form method="POST" action="/purchase">
             <input type="hidden" name="contact" value="{{ contact }}">
             <input type="text" name="name" placeholder="Patient Name" required><br>
-            <input type="number" name="age" placeholder="Age"><br>
-            <input type="text" name="gender" placeholder="Gender"><br>
+            <input type="number" name="age" placeholder="Age" required><br>
+            <input type="text" name="gender" placeholder="Gender" required><br>
 
-            <h3>Select Medicine</h3>
+            <h3>Select Medicines</h3>
+
+            <div id="medicine-list">
+                <div class="medicine-item">
+                    <select name="medicine" required>
+                        {% for med, price in medicines.items() %}
+                            <option value="{{ med }}">{{ med }} — ₹{{ price }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" name="qty" min="1" placeholder="Quantity" required>
+                </div>
+            </div>
+
+            <button type="button" class="add-btn" onclick="addMedicine()">+ Add Another Medicine</button>
+            <br><br>
+            <button type="submit">Register & Purchase</button>
+        </form>
+    </div>
+
+    <script>
+    // Function to add new medicine dropdown dynamically
+    function addMedicine() {
+        const div = document.createElement('div');
+        div.className = 'medicine-item';
+        div.innerHTML = `
             <select name="medicine" required>
                 {% for med, price in medicines.items() %}
                     <option value="{{ med }}">{{ med }} — ₹{{ price }}</option>
                 {% endfor %}
-            </select><br>
-            <input type="number" name="qty" min="1" value="1" required><br>
-
-            <button type="submit">Register & Purchase</button>
-        </form>
-    </div>
+            </select>
+            <input type="number" name="qty" min="1" placeholder="Quantity" required>
+        `;
+        document.getElementById('medicine-list').appendChild(div);
+    }
+    </script>
 </body>
-
 </html>
