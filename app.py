@@ -106,51 +106,48 @@ def existing_patient(contact):
 def new_patient(contact):
     return render_template('new_patient.html', contact=contact, medicines=medicines)
 
-# PURCHASE ROUTE (SAVE + SHOW ONLY LATEST BILL)
+# PURCHASE ROUTE (Multiple medicines)
 @app.route('/purchase', methods=['POST'])
 def purchase():
     name = request.form.get('name')
     contact = request.form.get('contact')
     age = request.form.get('age')
     gender = request.form.get('gender')
-    medicine = request.form.get('medicine')
-    qty = int(request.form.get('qty'))
-    total = medicines[medicine] * qty
 
+    # Collect all selected medicines and their quantities
+    selected_medicines = request.form.getlist('medicine')
+    quantities = request.form.getlist('qty')
+
+    bill_items = []
     conn = get_connection()
     cur = conn.cursor()
 
-    # Insert new purchase record
-    query = """INSERT INTO patients (Patient_name, Contact, Age, Gender, Medicine, Quantity, Total_price)
-               VALUES (%s, %s, %s, %s, %s, %s, %s)"""
-    cur.execute(query, (name, contact, age, gender, medicine, qty, total))
+    for med, qty_str in zip(selected_medicines, quantities):
+        if not qty_str.strip():
+            continue
+        qty = int(qty_str)
+        total = medicines[med] * qty
+
+        query = """INSERT INTO patients (Patient_name, Contact, Age, Gender, Medicine, Quantity, Total_price)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+        cur.execute(query, (name, contact, age, gender, med, qty, total))
+        bill_items.append((med, qty, total))
+
     conn.commit()
-
-    # Get the ID of this inserted record
-    patient_id = cur.lastrowid
-
-    # Fetch only this latest purchase for the bill
-    cur.execute("""
-        SELECT Medicine, Quantity, Total_price
-        FROM patients
-        WHERE Patient_id = %s
-    """, (patient_id,))
-    bill_items = cur.fetchall()
     conn.close()
 
-    # Calculate total for this one purchase
-    grand_total = sum([item[2] for item in bill_items])
+    # Calculate total for all selected medicines
+    grand_total = sum(item[2] for item in bill_items)
 
     # Generate payment link
     payment_link = f"upi://pay?pa=swethamurugan64@oksbi&pn=ClinicName&am={grand_total}&cu=INR&tn=Clinic%20Payment"
 
-    # Generate QR code image
+    # Generate QR code
     qr = qrcode.make(payment_link)
     buf = io.BytesIO()
     qr.save(buf, format='PNG')
     qr_data = base64.b64encode(buf.getvalue()).decode('utf-8')
 
-    # Render the bill page (for this purchase only)
     return render_template(
         'output.html',
         name=name,
@@ -163,15 +160,16 @@ def purchase():
         payment_link=payment_link
     )
 
-#Run flask app
+# Run flask app
 if __name__ == '__main__':
     @app.context_processor
     def inject_now():
         return {'now': datetime.now}
     
-    # Get port dynamically from Render environment variable
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
+
 
 
 
